@@ -1,0 +1,42 @@
+.books-container{
+    padding: 0px 16px ;
+    margin-bottom: 50px;
+    mat-card.book-card{
+        width: 44%;
+        margin: 0px 8px 15px 8px;
+        cursor: pointer;
+        &:hover{
+            box-shadow: 5px 10px 18px lightgrey;
+        }
+        .book-image{
+            width:100px;
+            height: 150px;
+        }
+        .book-description{
+            margin-top:8px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            -webkit-line-clamp: 3;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            white-space: normal;
+        }
+        
+    } 
+}
+
+@media screen and (max-width:767px) {
+    .books-container{
+        mat-card.book-card{
+            width: 92%;
+        }
+    }
+}
+
+@media screen and (min-width:768px )and (max-width:1023px) {
+    .books-container{
+        mat-card.book-card{
+            width: 41%;
+        }
+    }
+}

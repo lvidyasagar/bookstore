@@ -1,0 +1,28 @@
+.container{
+    overflow: hidden;
+    .header{
+        padding: 7px 0px;
+        button.sidenav-btn{
+            background-color: transparent;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .app-title{
+            margin-left: 10px;
+            text-transform: capitalize;
+        }
+    }
+    
+    .sidenav-container{
+        mat-icon.nav-link-icon{
+            margin-right: 7px;
+        }
+    }
+}
+
+@media screen and (max-width:767px) {
+    .sidenav-content{
+        margin-left: 0px !important;
+    }
+}
