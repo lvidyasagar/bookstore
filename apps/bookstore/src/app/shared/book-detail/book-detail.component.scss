@@ -1,0 +1,29 @@
+.book-card-container{
+    margin:20px 10px 50px 10px;
+    padding: 18px;
+    .book-card{
+        width: 80%;
+        .book-image{
+            width: 125px;
+            height: 130px;
+        }
+        .book-content{
+            list-style-type: none;
+            padding: 0px;
+            margin-top: 2px;
+        }
+        .book-authors{
+            margin-top: 15px;
+        }
+        .book-btn{
+            margin-bottom: 20px;
+        }
+    }
+}
+
+b{
+    &::after{
+        content: ":";
+        margin: 0px 10px;
+    }
+}

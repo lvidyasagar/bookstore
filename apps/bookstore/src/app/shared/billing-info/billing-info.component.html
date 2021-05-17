@@ -1,0 +1,46 @@
+<div class="bill-container" fxLayout="column" fxLayoutAlign="center center" fxFill>
+    <mat-card class="bill-card">
+        <mat-card-header fxLayoutAlign="flex-end">
+            <mat-icon aria-hidden="false">request_quote</mat-icon>
+        </mat-card-header>
+        <mat-card-content fxLayout="row wrap" fxLayout.xs="column wrap" fxLayoutAlign="center">
+            <div class="card-section">
+                <img src="../../../assets/bill.png" alt="">
+            </div>
+            <div class="card-section" fxLayout="column">
+                <form [formGroup]="BillForm" (ngSubmit)="submitBill()" fxLayout="column wrap" fxLayout.sm="column wrap" fxLayoutAlign="center center">
+                    <mat-form-field>
+                        <mat-label>Name</mat-label>
+                        <input matInput type="text" formControlName="name" required>
+                        <mat-error *ngIf="name && name.invalid">
+                            Name is required
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Email</mat-label>
+                        <input matInput type="email" formControlName="email" required>
+                        <mat-error *ngIf="email && email.invalid">
+                            <span *ngIf="email.errors && email.errors.required">Email is required</span>
+                            <span *ngIf="email.errors && email.errors.email">Email is not valid</span>
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Phone Number</mat-label>
+                        <input class="phone-number" matInput type="number" formControlName="phone" required>
+                        <mat-error *ngIf="phone && phone.invalid && (phone.dirty || phone.touched)">
+                            <span *ngIf="phone.errors && phone.errors.required">Phone Number is required</span>
+                            <span *ngIf="phone.errors && phone.errors.pattern">Phone Number must have ten digits
+                                only</span>
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Address</mat-label>
+                        <textarea matInput fomControlName="address"></textarea>
+                    </mat-form-field>
+                    <br>
+                    <button type="submit" [disabled]="!BillForm.valid" mat-raised-button color="primary">Submit</button>
+                </form>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

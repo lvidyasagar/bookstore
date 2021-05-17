@@ -1,7 +1,9 @@
 {
-  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
-  "newProjectRoot": "projects",
+  "cli": {
+    "defaultCollection": "@nrwl/angular"
+  },
+  "defaultProject": "bookstore",
   "projects": {
     "bookstore": {
       "projectType": "application",
@@ -13,26 +15,26 @@
           "strict": true
         }
       },
-      "root": "",
-      "sourceRoot": "src",
+      "root": "apps/bookstore",
+      "sourceRoot": "apps/bookstore/src",
       "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/bookstore",
-            "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.app.json",
+            "outputPath": "dist/apps/bookstore",
+            "index": "apps/bookstore/src/index.html",
+            "main": "apps/bookstore/src/main.ts",
+            "polyfills": "apps/bookstore/src/polyfills.ts",
+            "tsConfig": "apps/bookstore/tsconfig.app.json",
             "aot": true,
             "assets": [
-              "src/favicon.ico",
-              "src/assets"
+              "apps/bookstore/src/favicon.ico",
+              "apps/bookstore/src/assets"
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.scss"
+              "apps/bookstore/src/styles.scss"
             ],
             "scripts": []
           },
@@ -40,8 +42,8 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
+                  "replace": "apps/bookstore/src/environments/environment.ts",
+                  "with": "apps/bookstore/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -86,17 +88,18 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "tsconfig.spec.json",
-            "karmaConfig": "karma.conf.js",
+            "codeCoverage":true,
+            "main": "apps/bookstore/src/test.ts",
+            "polyfills": "apps/bookstore/src/polyfills.ts",
+            "tsConfig": "apps/bookstore/tsconfig.spec.json",
+            "karmaConfig": "apps/bookstore/karma.conf.js",
             "assets": [
-              "src/favicon.ico",
-              "src/assets"
+              "apps/bookstore/src/favicon.ico",
+              "apps/bookstore/src/assets"
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/purple-green.css",
-              "src/styles.scss"
+              "apps/bookstore/src/styles.scss"
             ],
             "scripts": []
           }
@@ -105,9 +108,8 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "tsconfig.app.json",
-              "tsconfig.spec.json",
-              "e2e/tsconfig.json"
+              "apps/bookstore/tsconfig.app.json",
+              "apps/bookstore/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -127,7 +129,33 @@
           }
         }
       }
+    },
+    "bookstore-e2e": {
+      "root": "apps/bookstore-e2e",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "apps/bookstore-e2e/protractor.conf.js",
+            "devServerTarget": "bookstore:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "bookstore:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": "apps/bookstore-e2e/tsconfig.json",
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
-  },
-  "defaultProject": "bookstore"
+  }
 }

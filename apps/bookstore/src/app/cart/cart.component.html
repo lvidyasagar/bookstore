@@ -1,0 +1,4 @@
+<div class="cart-container" *ngIf="cartBooks.length>0;" fxLayout="column wrap" fxLayoutAlign="center center">
+    <app-book-summary  [books]="cartBooks" [isSingleColumn]="true" [isCart]="true" (cartEvent)="removeBookFromCart($event)"></app-book-summary>
+    <button mat-raised-button color="warn" (click)="proceedToBuy()">Proceed To Purchase</button>
+</div>

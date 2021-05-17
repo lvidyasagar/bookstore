@@ -1,0 +1,12 @@
+<div class="dialog-container" fxLayout="column" fxLayoutAlign="center flex-start">
+    <h2 class="error-title" mat-dialog-title>{{data.heading}}</h2>
+    <div mat-dialog-content>
+        <p>{{data.message}}</p>
+    </div>
+    <div mat-dialog-actions>
+        <button mat-button  cdkFocusInitial (click)="dialogRef.close();">{{data.buttonText}}</button>
+    </div>
+</div>
+
+
+
