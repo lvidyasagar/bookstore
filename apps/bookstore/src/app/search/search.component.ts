@@ -37,9 +37,6 @@ export class SearchComponent implements OnDestroy{
      }
   }
 
-  clearSearchString(){
-    this.searchForm.reset();
-  }
 
   redirectToBookDetail(bookId:string){
     this.router.navigate(['book-detail',bookId]);
