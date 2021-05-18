@@ -11,7 +11,7 @@ export interface Items{
 
 export interface Book{
     title:string,
-    subtitle:string,
+    subtitle?:string,
     authors:string[],
     description:string,
     averageRating:number,

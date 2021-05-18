@@ -15,10 +15,6 @@ export class ApiService {
 
   constructor(private http: HttpClient) {}
 
-  setSearchBooks(volumeInfo: Items[]) {
-    this.currentSearchBooks = volumeInfo;
-  }
-
   getCurrentBookById(id: string): Observable<Items> {
     return this.http.get<Items>(environment.getBookByIdGoogleBooksApi + id);
   }
