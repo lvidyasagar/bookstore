@@ -9,7 +9,6 @@
 
 # dependencies
 /node_modules
-/apps/bookstore/coverage
 
 
 # profiling files
