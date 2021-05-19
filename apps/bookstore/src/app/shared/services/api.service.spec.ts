@@ -18,7 +18,6 @@ describe('ApiService', () => {
   });
 
   afterEach(() => {
-    // After every test, assert that there are no more pending requests.
     httpTestingController.verify();
 });
 
