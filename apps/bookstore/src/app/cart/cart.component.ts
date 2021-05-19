@@ -19,9 +19,9 @@ export class CartComponent implements OnInit {
     this.getCartBooks();
   }
 
-  getCartBooks() {
+  getCartBooks(): void {
     this.cartBooks = this.apiService.getCartBooks();
-    if (this.cartBooks.length == 0) {
+    if (this.cartBooks.length === 0) {
       this.openDialog();
     }
   }
@@ -31,20 +31,18 @@ export class CartComponent implements OnInit {
       height: '200px',
       data: { heading: 'Error', message: 'No Books were added into Cart or Cart is Empty', buttonText: 'Close' }
     });
-    
-
     dialogRef.afterClosed().subscribe(() => {
       this.router.navigate(['search']);
-    })
+    });
   }
 
-  removeBookFromCart(bookIndex: number) {
+  removeBookFromCart(bookIndex: number): void {
     this.apiService.removeCartItemonIndex(bookIndex);
     this.getCartBooks();
   }
 
-  proceedToBuy(){
-    this.router.navigateByUrl('/bill',{state:{"books":this.cartBooks,"removeCart":true}});
+  proceedToBuy(): void{
+    this.router.navigateByUrl('/bill', {state: {books: this.cartBooks, removeCart: true}});
   }
 
 }

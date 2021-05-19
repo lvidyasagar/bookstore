@@ -12,11 +12,11 @@ import { ApiService } from '../shared/services/api.service';
 export class BookCollectionComponent implements OnInit {
   booksCollection!: Items[];
 
-  constructor(private apiService:ApiService,private router:Router,private dialog:MatDialog) { }
+  constructor(private apiService: ApiService, private router: Router, private dialog: MatDialog) { }
 
   ngOnInit(): void {
-    this.booksCollection=this.apiService.getMyBookCollection();
-    if(this.booksCollection.length==0){
+    this.booksCollection = this.apiService.getMyBookCollection();
+    if (this.booksCollection.length === 0){
       this.openDialog();
     }
   }
@@ -25,12 +25,12 @@ export class BookCollectionComponent implements OnInit {
     const dialogRef = this.dialog.open(ErrorDialogComponent, {
       width: '40%',
       height: '200px',
-      data: {heading:'Error',message:'No Books were purchased and added into collections. Proceed to Search Page',buttonText:'OK'}
+      data: {heading: 'Error', message: 'No Books were purchased and added into collections. Proceed to Search Page', buttonText: 'OK'}
     });
 
-    dialogRef.afterClosed().subscribe(()=>{
+    dialogRef.afterClosed().subscribe(() => {
       this.router.navigate(['search']);
-    })
+    });
   }
 
 }

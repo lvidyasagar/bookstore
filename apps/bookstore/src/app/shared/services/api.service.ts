@@ -22,7 +22,7 @@ export class ApiService {
     return this.http.get<Books>(environment.googleApiUrl + searchString);
   }
 
-  setCartBooks(book: Items) {
+  setCartBooks(book: Items): void {
     this.cartBooks.push(book);
   }
 
@@ -30,18 +30,18 @@ export class ApiService {
     return this.cartBooks;
   }
 
-  removeCartItemonIndex(bookIndex: number) {
+  removeCartItemonIndex(bookIndex: number): void {
     this.cartBooks.splice(bookIndex, 1);
     this.updateCartCount();
   }
 
-  updateCartCount() {
+  updateCartCount(): void {
     this.cartSubject.next(this.cartBooks.length);
   }
 
-  saveToMyBookCollections(book: Items[]) {
-    book.map((book) => {
-      this.myBookCollectionsList.push(book);
+  saveToMyBookCollections(book: Items[]): void {
+    book.map((currentBook) => {
+      this.myBookCollectionsList.push(currentBook);
     });
   }
 

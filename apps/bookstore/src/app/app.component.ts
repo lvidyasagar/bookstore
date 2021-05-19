@@ -6,27 +6,29 @@ import { ApiService } from './shared/services/api.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit,OnDestroy {
+export class AppComponent implements OnInit, OnDestroy {
   title = 'enlight';
   routes = [
-    {name: 'Search', path: '/search', icon: 'search'},
-    {name: 'Cart', path: '/cart', icon: 'shopping_cart'},
-    {name: 'My Collections', path: '/book-collection', icon: 'dns'},
+    { name: 'Search', path: '/search', icon: 'search' },
+    { name: 'Cart', path: '/cart', icon: 'shopping_cart' },
+    { name: 'My Collections', path: '/book-collection', icon: 'dns' },
   ];
-  cartLength: number=0;
+  cartLength = 0;
   subscription!: Subscription;
 
-  constructor(public mediaObserver: MediaObserver,private apiService:ApiService){
-
-  }
+  constructor(
+    public mediaObserver: MediaObserver,
+    private apiService: ApiService
+  ) {}
   ngOnInit(): void {
-    this.subscription=this.apiService.cartSubject.subscribe((cartItems)=>this.cartLength=cartItems);
+    this.subscription = this.apiService.cartSubject.subscribe(
+      (cartItems) => (this.cartLength = cartItems)
+    );
   }
 
-  ngOnDestroy(){
+  ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
-
 }

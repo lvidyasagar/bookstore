@@ -5,33 +5,31 @@ import { SharedModule } from '../shared.module';
 import { ErrorDialogComponent } from './error-dialog.component';
 
 describe('ErrorDialogComponent', () => {
-
-  const data={
-    heading:'Error',
-    message:'test',
-    buttonText:'Ok'
+  const data = {
+    heading: 'Error',
+    message: 'test',
+    buttonText: 'Ok',
   };
-  const close=()=>{}
+  const close = () => {};
 
   let component: ErrorDialogComponent;
   let fixture: ComponentFixture<ErrorDialogComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports:[SharedModule],
-      declarations: [ ErrorDialogComponent ],
-      providers:[
+      imports: [SharedModule],
+      declarations: [ErrorDialogComponent],
+      providers: [
         {
-          provide:MAT_DIALOG_DATA,
-          useValue:data
+          provide: MAT_DIALOG_DATA,
+          useValue: data,
         },
         {
-          provide:MatDialogRef,
-          useValue:close
-        }
-      ]
-    })
-    .compileComponents();
+          provide: MatDialogRef,
+          useValue: close,
+        },
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -44,9 +42,9 @@ describe('ErrorDialogComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should show sent data on the dialog',()=>{
+  it('should show sent data on the dialog', () => {
     expect(component.data.buttonText).toBe('Ok');
     expect(component.data.heading).toBe('Error');
     expect(component.data.message).toBe('test');
-  })
+  });
 });
