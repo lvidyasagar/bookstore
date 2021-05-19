@@ -95,7 +95,7 @@ describe('SearchComponent', () => {
   });
 
   it('should redirect to book detail page when click on book', () => {
-    component.redirectToBookDetail('1')
+    component.redirectToBookDetail('1');
     expect(mockRouter.navigate).toHaveBeenCalledWith(['book-detail', '1']);
   });
 
