@@ -2,50 +2,50 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { Items } from '../models/Books';
-import { ApiService } from '../services/api.service';
-import { SharedModule } from '../shared.module';
+import { BookFacade } from '../state/book.facade';
+import { provideMockStore } from '@ngrx/store/testing';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { BillingInfoComponent } from './billing-info.component';
+import { initialBooksState } from '../state/book.state';
+import { mockBooks } from '../models/Book-mock';
+import { ReactiveFormsModule } from '@angular/forms';
+import { BookCollectionComponent } from '../../book-collection/book-collection.component';
+import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
-const book: Items = {
-  id: '123',
-  volumeInfo: {
-    title: 'Test',
-    authors: ['test1'],
-    averageRating: 2.5,
-    description: 'Sample',
-    imageLinks: { smallThumbnail: '', thumbnail: '' },
-    language: 'en',
-    pageCount: 12,
-    publisher: 'Test',
-    subtitle: 'Test12',
-  },
-};
-
-const routes = [{ path: 'bill', component: BillingInfoComponent }];
+const routes = [
+  { path: 'bill', component: BillingInfoComponent },
+  { path: 'book-collection', component: BookCollectionComponent}
+];
 
 describe('BillingInfoComponent', () => {
   let component: BillingInfoComponent;
   let fixture: ComponentFixture<BillingInfoComponent>;
-  let apiService: ApiService;
+  let facade: BookFacade;
+  let router: Router;
+  let location: Location;
+  const initialState = initialBooksState;
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
         RouterTestingModule.withRoutes(routes),
         HttpClientTestingModule,
-        SharedModule,
         BrowserAnimationsModule,
+        ReactiveFormsModule
       ],
-      providers: [ApiService],
-      declarations: [BillingInfoComponent],
+      providers: [BookFacade, provideMockStore ({initialState})],
+      declarations: [BillingInfoComponent, BookCollectionComponent],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(BillingInfoComponent);
     component = fixture.componentInstance;
-    apiService = TestBed.inject(ApiService);
+    facade = TestBed.inject(BookFacade);
+    router = TestBed.inject(Router);
+    location = TestBed.inject(Location);
     fixture.detectChanges();
   });
 
@@ -55,9 +55,13 @@ describe('BillingInfoComponent', () => {
 
   it('should submit bill form if its valid and redirect to books collection page', () => {
     const state = {
-      books: [book],
+      book: mockBooks.items[0].id,
       removeCart: false,
     };
+    spyOn(facade, 'addUserAndBillDetails');
+    spyOn(facade, 'addBookToCollection');
+    spyOn(router , 'navigate');
+
     component.pendingPaymentBooks = { state };
     expect(component.BillForm.valid).toBeFalsy();
     component.BillForm.controls.name.setValue('Test');
@@ -66,24 +70,28 @@ describe('BillingInfoComponent', () => {
 
     expect(component.BillForm.valid).toBeTruthy();
     component.submitBill();
-
-    expect(apiService.myBookCollectionsList.length).toBe(1);
+    fixture.detectChanges();
+    expect(facade.addUserAndBillDetails).toHaveBeenCalledWith(component.BillForm.value);
+    expect(facade.addBookToCollection).toHaveBeenCalledWith(state.book);
+    expect(router.navigate).toHaveBeenCalledWith(['/book-collection']);
   });
 
   it('submitting bill form redirect to books collection page, remove cart items and update cart count if any items in the cart', () => {
     const state = {
-      books: [book],
       removeCart: true,
     };
     component.pendingPaymentBooks = { state };
     component.BillForm.controls.name.setValue('Test');
     component.BillForm.controls.email.setValue('test@gmail.com');
     component.BillForm.controls.phone.setValue('9876543210');
-
+    spyOn(facade, 'addBooksToCollectionFromCart');
+    spyOn(facade, 'removeCartBooks');
+    spyOn(router , 'navigate');
     expect(component.BillForm.valid).toBeTruthy();
     component.submitBill();
-
-    expect(apiService.cartBooks).toEqual([]);
+    expect(facade.addBooksToCollectionFromCart).toHaveBeenCalled();
+    expect(facade.removeCartBooks).toHaveBeenCalled();
+    expect(router.navigate).toHaveBeenCalledWith(['/book-collection']);
   });
 
   it('should show alert if no books were added into cart when user directly opens bill page', () => {

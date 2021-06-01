@@ -1,102 +1,151 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { SharedModule } from '../shared/shared.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SearchComponent } from './search.component';
-import { ApiService } from '../shared/services/api.service';
-import { Books, Items } from '../shared/models/Books';
-import { of } from 'rxjs';
 import { Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
-
-const book: Items = {
-  id: '123',
-  volumeInfo: {
-    title: 'Test',
-    authors: ['test1'],
-    averageRating: 1,
-    description: 'Sample',
-    imageLinks: { smallThumbnail: '', thumbnail: '' },
-    language: 'en',
-    pageCount: 12,
-    publisher: 'Test',
-    subtitle: 'Test12',
-  },
-};
-
-const books: Books = {
-  kind: '',
-  items: [book],
-  totalitems: 1
-};
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { BookFacade } from '../shared/state/book.facade';
+import { provideMockStore, MockStore } from '@ngrx/store/testing';
+import { MemoizedSelector } from '@ngrx/store';
+import { BooksState, initialBooksState } from '../shared/state/book.state';
+import { mockBooksState } from '../shared/mocks/mockState';
+import * as BooksSelectors from '../shared/state/book.selector';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { InteractivityChecker } from '@angular/cdk/a11y';
 
 describe('SearchComponent', () => {
   let component: SearchComponent;
   let fixture: ComponentFixture<SearchComponent>;
-  let apiService: ApiService;
+  let facade: BookFacade;
   let dialog: MatDialog;
   const mockRouter = {
-    navigate: jasmine.createSpy('navigate')
+    navigate: jasmine.createSpy('navigate'),
   };
+  let mockStore: MockStore;
+  let mockBooksSelector: MemoizedSelector<BooksState, any>;
+  let mockSearchStringSelector: MemoizedSelector<BooksState, any>;
+  let mockerrorSelector: MemoizedSelector<BooksState, any>;
+
+  const initialState = initialBooksState;
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
         HttpClientTestingModule,
-        SharedModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        ReactiveFormsModule,
+        MatDialogModule,
       ],
       providers: [
-        ApiService,
+        BookFacade,
         MatDialog,
-        { provide: Router, useValue: mockRouter }
+        { provide: Router, useValue: mockRouter },
+        provideMockStore({
+          initialState,
+        }),
       ],
-      declarations: [ SearchComponent ]
+      declarations: [SearchComponent],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
-    .compileComponents();
+      .overrideProvider(InteractivityChecker, {
+        useValue: {
+          isFocusable: () => true,
+        },
+      })
+      .compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SearchComponent);
     component = fixture.componentInstance;
-    apiService = TestBed.inject(ApiService);
+    facade = TestBed.inject(BookFacade);
     dialog = TestBed.inject(MatDialog);
+    mockStore = TestBed.inject(MockStore);
+    mockBooksSelector = mockStore.overrideSelector(
+      BooksSelectors.getSearchResults,
+      initialState.searchResults
+    );
+    mockSearchStringSelector = mockStore.overrideSelector(
+      BooksSelectors.getSearchString,
+      initialState.searchString
+    );
+    mockerrorSelector = mockStore.overrideSelector(
+      BooksSelectors.getError,
+      initialState.error
+    );
     fixture.detectChanges();
   });
 
+  afterEach(() => {
+    dialog.closeAll();
+  });
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('submmiting search form should call books api service', () => {
-    expect(component.searchForm.valid).toBeFalsy();
-    component.searchForm.controls.searchString.setValue('Angular');
-    expect(component.searchForm.valid).toBeTruthy();
-
-    spyOn(apiService, 'getBooksBySearch').and.returnValue(of(books));
-    component.searchBooks();
-    expect(apiService.getBooksBySearch).toHaveBeenCalledWith('Angular');
-    expect(component.books.items.length).toBe(1);
-
+  it('On load of component should get initial state from store', () => {
+    fixture.detectChanges();
+    expect(component.books).toBeUndefined();
+    expect(component.searchForm.controls.searchString.value).toBe('');
+    facade.error$.subscribe((err) => {
+      expect(err).toBe(false);
+    });
   });
 
-  it('should show error dialog if search returns empty/undefined', () => {
-    const testbook: Books = {kind: '', items: [], totalitems: 0};
-    expect(component.searchForm.valid).toBeFalsy();
-    component.searchForm.controls.searchString.setValue('Angular');
-    expect(component.searchForm.valid).toBeTruthy();
+  it('should update state data from store whenever state updates', () => {
+    mockBooksSelector.setResult(mockBooksState.searchResults);
+    mockSearchStringSelector.setResult(mockBooksState.searchString);
+    mockStore.refreshState();
+    fixture.detectChanges();
+    expect(component.books.length).toBe(1);
+    expect(component.searchForm.controls.searchString.value).toBe('Angular');
+    facade.error$.subscribe((err) => {
+      expect(err).toBe(false);
+    });
+  });
 
-    spyOn(apiService, 'getBooksBySearch').and.returnValue(of(testbook));
+  it('should show error pop when google api is down', () => {
     spyOn(dialog, 'open');
-    component.searchBooks();
-    expect(apiService.getBooksBySearch).toHaveBeenCalled();
+    mockerrorSelector.setResult(true);
+    mockStore.refreshState();
+    component.ngOnInit();
     expect(dialog.open).toHaveBeenCalled();
   });
 
-  it('should redirect to book detail page when click on book', () => {
-    component.redirectToBookDetail('1');
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['book-detail', '1']);
+  it('submmiting search form should call search related actions', () => {
+    spyOn(facade, 'setSearchString');
+    spyOn(facade, 'dispatchSearchResults');
+    spyOn(facade, 'addRecentSearches');
+
+    component.searchForm.controls.searchString.setValue('Angular');
+    component.searchBooks();
+    fixture.detectChanges();
+    expect(component.searchForm.valid).toBeTruthy();
+    expect(facade.setSearchString).toHaveBeenCalledWith('Angular');
+    expect(facade.dispatchSearchResults).toHaveBeenCalled();
+    expect(facade.addRecentSearches).toHaveBeenCalledWith('Angular');
   });
 
+  it('should show error dialog if search returns empty results', () => {
+    mockBooksSelector.setResult([]);
+    mockSearchStringSelector.setResult('afgsajfhsakjfasg');
+    mockStore.refreshState();
+    spyOn(component, 'openDialog');
+    component.ngOnInit();
+    fixture.detectChanges();
+    expect(component.openDialog).toHaveBeenCalledWith(
+      'No books found with Search Criteria'
+    );
+  });
+
+  it('should redirect to book detail page when click on book', () => {
+    component.redirectToBookDetail('XDNyDwAAQBAJ');
+    expect(mockRouter.navigate).toHaveBeenCalledWith([
+      'book-detail',
+      'XDNyDwAAQBAJ',
+    ]);
+  });
 });

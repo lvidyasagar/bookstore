@@ -1,48 +1,59 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ApiService } from '../shared/services/api.service';
-import { SharedModule } from '../shared/shared.module';
-
+import { provideMockStore, MockStore } from '@ngrx/store/testing';
+import { MemoizedSelector } from '@ngrx/store';
 import { CartComponent } from './cart.component';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { BookFacade } from '../shared/state/book.facade';
+import { BooksState, initialBooksState } from '../shared/state/book.state';
+import * as BooksSelectors from '../shared/state/book.selector';
 import { mockBooks } from '../shared/models/Book-mock';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { ErrorDialogComponent } from '../shared/error-dialog/error-dialog.component';
-import { of } from 'rxjs';
-
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 describe('CartComponent', () => {
   let component: CartComponent;
   let fixture: ComponentFixture<CartComponent>;
-  let apiService: ApiService;
+  let facade: BookFacade;
+  let mockStore: MockStore;
+  let mockCartBooksSelector: MemoizedSelector<BooksState, any>;
   const mockRouter = {
     navigate: jasmine.createSpy('navigate'),
     navigateByUrl: jasmine.createSpy('navigateByUrl'),
   };
+
+  const initialState = initialBooksState;
   let dialog: MatDialog;
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
         HttpClientTestingModule,
-        SharedModule,
         BrowserAnimationsModule,
+        MatDialogModule,
       ],
       providers: [
-        ApiService,
         MatDialog,
-        { provide: Router, useValue: mockRouter }
+        BookFacade,
+        { provide: Router, useValue: mockRouter },
+        provideMockStore({ initialState }),
       ],
       declarations: [CartComponent],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(CartComponent);
     component = fixture.componentInstance;
-    apiService = TestBed.inject(ApiService);
+    facade = TestBed.inject(BookFacade);
     dialog = TestBed.inject(MatDialog);
+    mockStore = TestBed.inject(MockStore);
+    mockCartBooksSelector = mockStore.overrideSelector(
+      BooksSelectors.getCartBooks,
+      mockBooks.items
+    );
     fixture.detectChanges();
   });
 
@@ -52,31 +63,23 @@ describe('CartComponent', () => {
 
   it('should redirect to book detail page when click on book', () => {
     const state = {
-      books: mockBooks.items,
-      removeCart: true
+      removeCart: true,
     };
-    component.cartBooks = mockBooks.items;
     component.proceedToBuy();
-    expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('/bill', {state});
+    expect(mockRouter.navigateByUrl).toHaveBeenCalledWith('/bill', { state });
   });
 
-  it('removeBookFromCart method should call removeCartItemonIndex apiservice method', () => {
-    spyOn(apiService, 'removeCartItemonIndex');
-    spyOn(apiService, 'getCartBooks').and.returnValue(mockBooks.items);
-    component.removeBookFromCart(1);
-    expect(apiService.removeCartItemonIndex).toHaveBeenCalledOnceWith(1);
-    expect(apiService.getCartBooks).toHaveBeenCalled();
+  it('removeBookFromCart method should call removeBookCart action to remove books from cart', () => {
+    spyOn(facade, 'removeCartBookById');
+    component.removeBookFromCart('XDNyDwAAQBAJ');
+    expect(facade.removeCartBookById).toHaveBeenCalledWith('XDNyDwAAQBAJ');
   });
 
-  it('should open popup if cart is empty and return to search page', () => {
-    spyOn(dialog, 'open')
-     .and
-     .returnValue(
-      {afterClosed: () => of(true)} as MatDialogRef<ErrorDialogComponent, any>
-     );
-    component.openDialog();
+  it('should assign cartBooks$ when component is loaded', fakeAsync(() => {
     fixture.detectChanges();
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['search']);
-  });
-
+    component.cartBooks$.subscribe((book) => {
+      expect(book.length).toBe(1);
+      expect(book[0].id).toBe('XDNyDwAAQBAJ');
+    });
+  }));
 });

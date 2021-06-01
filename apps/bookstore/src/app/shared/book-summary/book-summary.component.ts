@@ -10,8 +10,9 @@ export class BookSummaryComponent implements OnInit {
   @Input() books!: Items[];
   @Input() isSingleColumn = false;
   @Input() isCart = false;
+  @Input() isCollection = false;
   @Output() bookEvent = new EventEmitter<string>();
-  @Output() cartEvent = new EventEmitter<number>();
+  @Output() cartEvent = new EventEmitter<string>();
 
   constructor() {}
 
@@ -25,7 +26,7 @@ export class BookSummaryComponent implements OnInit {
     this.bookEvent.emit(book.id);
   }
 
-  sendCurrentBookToCart(currentBookIndex: number): void {
-    this.cartEvent.emit(currentBookIndex);
+  sendCurrentBookToCart(currentBookId: string): void {
+    this.cartEvent.emit(currentBookId);
   }
 }

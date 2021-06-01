@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
 
 import { CdkTreeModule } from '@angular/cdk/tree';
 import { PortalModule } from '@angular/cdk/portal';
@@ -36,9 +38,11 @@ import { BookDetailComponent } from './book-detail/book-detail.component';
 import { BillingInfoComponent } from './billing-info/billing-info.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
-import { AuthorPipe } from './author.pipe';
-import { DescriptionPipe } from './description.pipe';
-
+import { AuthorPipe } from './pipes/author.pipe';
+import { DescriptionPipe } from './pipes/description.pipe';
+import { sharedReducer } from './state/book.reducer';
+import { BookFacade } from './state/book.facade';
+import { BookEffects } from './state/book.effects';
 
 const materialModules = [
   CdkTreeModule,
@@ -70,7 +74,7 @@ const materialModules = [
   MatTooltipModule,
   MatBadgeModule,
   MatDialogModule,
-  FlexLayoutModule
+  FlexLayoutModule,
 ];
 
 @NgModule({
@@ -78,14 +82,16 @@ const materialModules = [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    ...materialModules
+    StoreModule.forFeature('app', sharedReducer),
+    EffectsModule.forFeature([BookEffects]),
+    ...materialModules,
   ],
   exports: [
     BookSummaryComponent,
     BookDetailComponent,
     AuthorPipe,
     DescriptionPipe,
-    ...materialModules
+    ...materialModules,
   ],
   declarations: [
     BookSummaryComponent,
@@ -93,8 +99,8 @@ const materialModules = [
     BillingInfoComponent,
     ErrorDialogComponent,
     AuthorPipe,
-    DescriptionPipe
+    DescriptionPipe,
   ],
+  providers: [BookFacade],
 })
-export class SharedModule {
-}
+export class SharedModule {}

@@ -1,4 +1,17 @@
-<div class="cart-container" *ngIf="cartBooks.length>0;" fxLayout="column wrap" fxLayoutAlign="center center">
-    <app-book-summary  [books]="cartBooks" [isSingleColumn]="true" [isCart]="true" (cartEvent)="removeBookFromCart($event)"></app-book-summary>
-    <button mat-raised-button color="warn" (click)="proceedToBuy()">Proceed To Purchase</button>
+<div class="cart-container" fxLayout="column wrap" fxLayoutAlign="center center" fxFill
+    *ngIf="cartBooks$ | async as cartBooks">
+    <app-book-summary *ngIf="cartBooks.length > 0; else empty" [books]="cartBooks" [isSingleColumn]="true"
+        [isCart]="true" (cartEvent)="removeBookFromCart($event)"></app-book-summary>
+    <button *ngIf="cartBooks && cartBooks.length > 0" mat-raised-button color="warn" (click)="proceedToBuy()">
+        Proceed To Purchase
+    </button>
 </div>
+<ng-template #empty>
+    <mat-icon aria-hidden="false" class="cart-icon">shopping_cart</mat-icon>
+    <h1 class="heading">Cart is empty</h1>
+    <p class="content">Looks like no books were added into cart.</p>
+    <p>
+        Click <a routerLink="/search">here</a>
+        to continue search books page.
+    </p>
+</ng-template>

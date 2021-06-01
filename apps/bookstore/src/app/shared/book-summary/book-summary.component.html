@@ -1,18 +1,33 @@
 <div class="books-container" fxLayout="row wrap" fxLayout.xs="coulmn wrap" [class.single]="isSingleColumn">
-    <mat-card class="book-card" *ngFor="let book of books;let i=index; trackBy:trackByBookTitle;" (click)="sendBookId(book)">
-        <mat-card-header fxLayoutAlign="space-between">
-          <mat-card-title>{{book.volumeInfo.title}}</mat-card-title>
-          <img class="book-image" src="{{book.volumeInfo?.imageLinks?.smallThumbnail || '../../../../assets/no-image.jpg'}}" alt="No Image" />
-        </mat-card-header>
-        <mat-card-content>
-          <p class="book-description">
-            {{book.volumeInfo.description | htmltagremove}}
-          </p>
-          <b>Written By : </b>
-          <p>{{book.volumeInfo.authors | authors}}</p>
-        </mat-card-content>
-        <mat-card-actions *ngIf="isCart" fxLayout="row-reverse" class="book-btn">
-          <mat-icon aria-hidden="false" (click)="sendCurrentBookToCart(i)">remove_shopping_cart</mat-icon>
-        </mat-card-actions>
-      </mat-card>
+  <mat-card class="book-card" *ngFor="let book of books; let i = index; trackBy: trackByBookTitle"
+    (click)="sendBookId(book)">
+    <mat-card-header fxLayoutAlign="space-between">
+      <mat-card-title>{{ book.volumeInfo.title }}</mat-card-title>
+      <img class="book-image" 
+        src="{{book.volumeInfo?.imageLinks?.smallThumbnail ||'../../../../assets/no-image.jpg'}}"
+        alt="No Image" />
+    </mat-card-header>
+    <mat-card-content>
+      <p class="book-description">
+        {{ book.volumeInfo.description | htmltagremove }}
+      </p>
+      <div class="book-data" fxLayout="row wrap" fxLayout.xs="column wrap" fxLayoutAlign="space-between">
+        <div>
+          <h4>Written By : </h4>
+          <p>{{ book.volumeInfo.authors | authors }}</p>
+        </div>
+        <div class="bill-data" *ngIf="isCollection">
+          <h4>Purchased By :</h4>
+          <ul>
+            <li>{{book.userandbilldetails?.name +' , Ph.no: ' + book.userandbilldetails?.phone}}</li>
+          </ul>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions *ngIf="isCart" fxLayout="row-reverse" class="book-btn">
+      <mat-icon aria-hidden="false" (click)="sendCurrentBookToCart(book.id)">
+        remove_shopping_cart
+      </mat-icon>
+    </mat-card-actions>
+  </mat-card>
 </div>

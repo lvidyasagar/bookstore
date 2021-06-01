@@ -5,18 +5,17 @@ import { SearchRoutingModule } from './search-routing.module';
 import { SearchComponent } from './search.component';
 import { SharedModule } from '../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { BookFacade } from '../shared/state/book.facade';
 
 @NgModule({
-  declarations: [
-    SearchComponent
-  ],
+  declarations: [SearchComponent],
   imports: [
     CommonModule,
     SearchRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
-  ]
+    SharedModule,
+  ],
+  providers: [BookFacade],
 })
-export class SearchModule { }
+export class SearchModule {}

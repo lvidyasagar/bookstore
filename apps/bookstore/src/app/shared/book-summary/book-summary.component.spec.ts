@@ -5,6 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { BookSummaryComponent } from './book-summary.component';
 import { mockBooks } from '../models/Book-mock';
 import { Items } from '../models/Books';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('BookSummaryComponent', () => {
   let component: BookSummaryComponent;
@@ -14,6 +15,7 @@ describe('BookSummaryComponent', () => {
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule, HttpClientTestingModule],
       declarations: [BookSummaryComponent],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
   });
 
@@ -40,7 +42,7 @@ describe('BookSummaryComponent', () => {
 
   it('should match current book item index with cart added item index', fakeAsync(() => {
     spyOn(component.cartEvent, 'emit');
-    component.sendCurrentBookToCart(0);
-    expect(component.cartEvent.emit).toHaveBeenCalledWith(0);
+    component.sendCurrentBookToCart(book.id);
+    expect(component.cartEvent.emit).toHaveBeenCalledWith(book.id);
   }));
 });

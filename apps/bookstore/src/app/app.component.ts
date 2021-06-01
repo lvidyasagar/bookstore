@@ -1,14 +1,13 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MediaObserver } from '@angular/flex-layout';
-import { Subscription } from 'rxjs';
-import { ApiService } from './shared/services/api.service';
+import { BookFacade } from './shared/state/book.facade';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit {
   title = 'enlight';
   routes = [
     { name: 'Search', path: '/search', icon: 'search' },
@@ -16,19 +15,15 @@ export class AppComponent implements OnInit, OnDestroy {
     { name: 'My Collections', path: '/book-collection', icon: 'dns' },
   ];
   cartLength = 0;
-  subscription!: Subscription;
 
   constructor(
     public mediaObserver: MediaObserver,
-    private apiService: ApiService
+    private facade: BookFacade
   ) {}
-  ngOnInit(): void {
-    this.subscription = this.apiService.cartSubject.subscribe(
-      (cartItems) => (this.cartLength = cartItems)
-    );
-  }
 
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+  ngOnInit(): void {
+    this.facade.cartBooks$.subscribe(
+      (cartItems) => (this.cartLength = cartItems.length)
+    );
   }
 }

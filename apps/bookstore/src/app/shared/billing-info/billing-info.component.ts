@@ -6,7 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { NavigationExtras, Router } from '@angular/router';
-import { ApiService } from '../services/api.service';
+import { BookFacade } from '../state/book.facade';
 
 @Component({
   selector: 'app-billing-info',
@@ -17,7 +17,7 @@ export class BillingInfoComponent implements OnInit {
   BillForm!: FormGroup;
   pendingPaymentBooks: NavigationExtras | undefined;
 
-  constructor(private apiService: ApiService, private router: Router) {
+  constructor(private facade: BookFacade, private router: Router) {
     this.BillForm = new FormGroup({
       name: new FormControl('', Validators.required),
       email: new FormControl('', [Validators.required, Validators.email]),
@@ -30,7 +30,7 @@ export class BillingInfoComponent implements OnInit {
     this.pendingPaymentBooks = this.router.getCurrentNavigation()?.extras;
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   get name(): AbstractControl | null {
     return this.BillForm.get('name');
@@ -48,12 +48,12 @@ export class BillingInfoComponent implements OnInit {
       this.pendingPaymentBooks &&
       this.pendingPaymentBooks.state
     ) {
-      this.apiService.saveToMyBookCollections(
-        this.pendingPaymentBooks.state?.books
-      );
+      this.facade.addUserAndBillDetails(this.BillForm.value);
       if (this.pendingPaymentBooks.state.removeCart) {
-        this.apiService.cartBooks = [];
-        this.apiService.updateCartCount();
+        this.facade.addBooksToCollectionFromCart();
+        this.facade.removeCartBooks();
+      } else {
+        this.facade.addBookToCollection(this.pendingPaymentBooks.state.book);
       }
       this.router.navigate(['/book-collection']);
     } else {

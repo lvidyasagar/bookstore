@@ -9,9 +9,9 @@ export class AuthorPipe implements PipeTransform {
     if (authors && authors.length > 0) {
       for (let i = 0; i <= authors.length - 1; i++) {
         if (i === authors.length - 1 && authors.length > 1) {
-          result += ' and ';
+          result += 'and ';
         }
-        result += authors[i];
+        result += authors[i] + ' ';
       }
       return result;
     } else {

@@ -2,29 +2,21 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
-import { Items } from './shared/models/Books';
-import { ApiService } from './shared/services/api.service';
-
-const book: Items = {
-  id: '123',
-  volumeInfo: {
-    title: 'Test',
-    authors: ['test1'],
-    averageRating: 1,
-    description: 'Sample',
-    imageLinks: { smallThumbnail: '', thumbnail: '' },
-    language: 'en',
-    pageCount: 12,
-    publisher: 'Test',
-    subtitle: 'Test12',
-  },
-};
-
-
+import { BookFacade } from './shared/state/book.facade';
+import { provideMockStore, MockStore } from '@ngrx/store/testing';
+import { BooksState, initialBooksState } from './shared/state/book.state';
+import { MemoizedSelector } from '@ngrx/store';
+import * as BooksSelectors from './shared/state/book.selector';
+import { mockBooks } from './shared/models/Book-mock';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 describe('AppComponent', () => {
   let component: AppComponent;
   let fixture: ComponentFixture<AppComponent>;
-  let apiService: ApiService;
+  let facade: BookFacade;
+  let mockStore: MockStore;
+  let mockCartBooksSelector: MemoizedSelector<BooksState, any>;
+
+  const initialState = initialBooksState;
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
@@ -34,14 +26,20 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent
       ],
-      providers: [ApiService]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      providers: [BookFacade, provideMockStore({initialState})]
     }).compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AppComponent);
     component = fixture.componentInstance;
-    apiService = TestBed.inject(ApiService);
+    facade = TestBed.inject(BookFacade);
+    mockStore = TestBed.inject(MockStore);
+    mockCartBooksSelector = mockStore.overrideSelector(
+      BooksSelectors.getCartBooks,
+      initialBooksState.cartBooks
+    );
     fixture.detectChanges();
   });
 
@@ -54,12 +52,8 @@ describe('AppComponent', () => {
   });
 
   it('should cart length is zero on application load ', () => {
+     fixture.detectChanges();
      expect(component.cartLength).toEqual(0);
   });
 
-  it('should change cartlength when new book added to cart', () => {
-    apiService.setCartBooks(book);
-    apiService.updateCartCount();
-    expect(component.cartLength).toBe(1);
-  });
 });
