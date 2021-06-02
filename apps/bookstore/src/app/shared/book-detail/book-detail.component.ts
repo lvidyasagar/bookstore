@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Items } from '../../shared/models/Books';
@@ -8,7 +8,7 @@ import { BookFacade } from '../state/book.facade';
   templateUrl: './book-detail.component.html',
   styleUrls: ['./book-detail.component.scss'],
 })
-export class BookDetailComponent implements OnInit {
+export class BookDetailComponent implements OnInit, OnDestroy {
   starCount = 5;
   ratingArr: number[] = [];
   subscription!: Subscription;
@@ -25,7 +25,7 @@ export class BookDetailComponent implements OnInit {
     for (let index = 0; index < this.starCount; index++) {
       this.ratingArr.push(index);
     }
-    this.facade
+    this.subscription = this.facade
       .getBookDetailsById(this.route.snapshot.params.id)
       .subscribe((book) => {
         if (book) {
@@ -62,4 +62,7 @@ export class BookDetailComponent implements OnInit {
     });
   }
 
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
 }

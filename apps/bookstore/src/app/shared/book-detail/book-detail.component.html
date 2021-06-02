@@ -1,5 +1,5 @@
-<div class="book-card-container" fxLayout="row" fxLayoutAlign="center center">
-    <mat-card class="book-card" *ngIf="book">
+<div class="book-card-container" fxLayout="row wrap" fxLayoutAlign="center center">
+    <mat-card class="book-card" *ngIf="book else notfound">
         <mat-card-header fxLayoutAlign="space-between">
             <mat-card-title>{{book.volumeInfo.title}}</mat-card-title>
             <img src="{{ book.volumeInfo.imageLinks?.thumbnail || '../../../assets/no-image.jpg' }}" alt="No Image"
@@ -33,3 +33,14 @@
         </mat-card-actions>
     </mat-card>
 </div>
+<ng-template #notfound>
+    <div fxLayout="column wrap" fxLayoutAlign="center center" fxFill>
+        <mat-icon aria-hidden="false" class="cart-icon">book</mat-icon>
+        <h1 class="heading">Something went Wrong</h1>
+        <p>
+            Click <a href="/search">here</a>
+            to go back to search page.
+        </p>
+    </div>
+
+</ng-template>

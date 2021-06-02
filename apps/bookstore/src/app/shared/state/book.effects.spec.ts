@@ -8,7 +8,6 @@ import { BookEffects } from './book.effects';
 import { Observable, of, throwError } from 'rxjs';
 import { mockBooks } from '../models/Book-mock';
 import { mockBooksState } from '../mocks/mockState';
-import * as BookActions from './book.action';
 import * as BooksSelectors from './book.selector';
 import { MemoizedSelector } from '@ngrx/store';
 import { BooksState, initialBooksState } from './book.state';

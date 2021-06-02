@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { ErrorDialogComponent } from '../shared/error-dialog/error-dialog.component';
 import { Items } from '../shared/models/Books';
@@ -10,9 +11,9 @@ import { BookFacade } from '../shared/state/book.facade';
   selector: 'app-book-collection',
   templateUrl: './book-collection.component.html',
 })
-export class BookCollectionComponent implements OnInit {
+export class BookCollectionComponent implements OnInit, OnDestroy {
   booksCollection!: Items[];
-
+  subscription!: Subscription;
   constructor(
     private facade: BookFacade,
     private router: Router,
@@ -20,7 +21,7 @@ export class BookCollectionComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.facade.booksCollection$
+    this.subscription = this.facade.booksCollection$
       .pipe(distinctUntilChanged())
       .subscribe((books) => {
         if (books.length === 0) {
@@ -45,5 +46,9 @@ export class BookCollectionComponent implements OnInit {
     dialogRef.afterClosed().subscribe(() => {
       this.router.navigate(['search']);
     });
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

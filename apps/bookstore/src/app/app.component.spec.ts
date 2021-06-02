@@ -7,7 +7,6 @@ import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { BooksState, initialBooksState } from './shared/state/book.state';
 import { MemoizedSelector } from '@ngrx/store';
 import * as BooksSelectors from './shared/state/book.selector';
-import { mockBooks } from './shared/models/Book-mock';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 describe('AppComponent', () => {
   let component: AppComponent;

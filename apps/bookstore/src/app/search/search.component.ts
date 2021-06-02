@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -17,10 +17,10 @@ import { BookFacade } from '../shared/state/book.facade';
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss'],
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, OnDestroy {
   searchForm!: FormGroup;
   books!: Items[];
-  subscription!: Subscription[];
+  subscription: Subscription[] = [];
 
   constructor(
     private router: Router,
@@ -33,18 +33,18 @@ export class SearchComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.facade.searchString$.subscribe((value) => {
+    const subscription1 = this.facade.searchString$.subscribe((value) => {
       if (this.searchString) {
         this.searchString.setValue(value);
       }
     });
-    this.facade.error$.subscribe((error) => {
+    const subscription2 = this.facade.error$.subscribe((error) => {
       if (error) {
         const msg = 'Server Error';
         this.openDialog(msg);
       }
     });
-    this.facade.searchResults$.subscribe((books) => {
+    const subscription3 = this.facade.searchResults$.subscribe((books) => {
       const msg = 'No books found with Search Criteria';
       if (books && books.length > 0) {
         this.books = books;
@@ -52,6 +52,8 @@ export class SearchComponent implements OnInit {
         this.openDialog(msg);
       }
     });
+
+    this.subscription.push(subscription1, subscription2, subscription3);
   }
 
   get searchString(): AbstractControl | null {
@@ -80,5 +82,13 @@ export class SearchComponent implements OnInit {
         buttonText: 'Close',
       },
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription.length > 0) {
+      this.subscription.forEach((sub) => {
+        sub.unsubscribe();
+      });
+    }
   }
 }

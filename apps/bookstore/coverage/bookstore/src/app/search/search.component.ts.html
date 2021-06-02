@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>26/26</span>
+                <span class='fraction'>31/31</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">85.71% </span>
+                <span class="strong">81.25% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>12/14</span>
+                <span class='fraction'>13/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>9/9</span>
+                <span class='fraction'>11/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>25/25</span>
+                <span class='fraction'>30/30</span>
             </div>
         
             
@@ -141,7 +141,17 @@
 <a name='L82'></a><a href='#L82'>82</a>
 <a name='L83'></a><a href='#L83'>83</a>
 <a name='L84'></a><a href='#L84'>84</a>
-<a name='L85'></a><a href='#L85'>85</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -163,7 +173,7 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
@@ -195,6 +205,8 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -225,7 +237,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Component, OnInit } from '@angular/core';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">27x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -244,10 +264,10 @@ import { BookFacade } from '../shared/state/book.facade';
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss'],
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, OnDestroy {
   searchForm!: FormGroup;
   books!: Items[];
-  subscription!: Subscription[];
+  subscription: Subscription[] = [];
 &nbsp;
   constructor(
     private router: Router,
@@ -260,18 +280,18 @@ export class SearchComponent implements OnInit {
   }
 &nbsp;
   ngOnInit(): void {
-    this.facade.searchString$.subscribe((value) =&gt; {
+    const subscription1 = this.facade.searchString$.subscribe((value) =&gt; {
       <span class="missing-if-branch" title="else path not taken" >E</span>if (this.searchString) {
         this.searchString.setValue(value);
       }
     });
-    this.facade.error$.subscribe((error) =&gt; {
+    const subscription2 = this.facade.error$.subscribe((error) =&gt; {
       if (error) {
         const msg = 'Server Error';
         this.openDialog(msg);
       }
     });
-    this.facade.searchResults$.subscribe((books) =&gt; {
+    const subscription3 = this.facade.searchResults$.subscribe((books) =&gt; {
       const msg = 'No books found with Search Criteria';
       if (books &amp;&amp; books.length &gt; 0) {
         this.books = books;
@@ -279,6 +299,8 @@ export class SearchComponent implements OnInit {
         this.openDialog(msg);
       }
     });
+&nbsp;
+    this.subscription.push(subscription1, subscription2, subscription3);
   }
 &nbsp;
   get searchString(): AbstractControl | null {
@@ -308,6 +330,14 @@ export class SearchComponent implements OnInit {
       },
     });
   }
+&nbsp;
+  ngOnDestroy(): void {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (this.subscription.length &gt; 0) {
+      this.subscription.forEach((sub) =&gt; {
+        sub.unsubscribe();
+      });
+    }
+  }
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -316,7 +346,7 @@ export class SearchComponent implements OnInit {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Jun 01 2021 20:26:35 GMT+0530 (India Standard Time)
+                at Wed Jun 02 2021 13:44:54 GMT+0530 (India Standard Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
