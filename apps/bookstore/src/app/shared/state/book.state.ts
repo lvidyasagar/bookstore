@@ -5,7 +5,7 @@ export interface BooksState {
   searchString: string;
   searchResults: Items[];
   recentSearches: string[];
-  error: boolean;
+  error: string;
   userandbill: Bill;
   cartBooks: Items[];
   bookcollection: Items[];
@@ -15,7 +15,7 @@ export const initialBooksState: BooksState = {
   searchString: '',
   searchResults: [],
   recentSearches: [],
-  error: false,
+  error: '',
   userandbill: {
     name: '',
     address: '',

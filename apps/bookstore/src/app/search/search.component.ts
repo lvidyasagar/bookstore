@@ -40,16 +40,12 @@ export class SearchComponent implements OnInit, OnDestroy {
     });
     const subscription2 = this.facade.error$.subscribe((error) => {
       if (error) {
-        const msg = 'Server Error';
-        this.openDialog(msg);
+        this.openDialog(error);
       }
     });
     const subscription3 = this.facade.searchResults$.subscribe((books) => {
-      const msg = 'No books found with Search Criteria';
       if (books && books.length > 0) {
         this.books = books;
-      } else if (this.searchString && this.searchString.value) {
-        this.openDialog(msg);
       }
     });
 

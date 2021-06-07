@@ -29,7 +29,7 @@ export const sharedReducer = createReducer(
       return {
         ...state,
         searchResults: [],
-        error: true,
+        error: 'No books found with Search Criteria or Server Error',
       };
     }
   ),

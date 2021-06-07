@@ -20,15 +20,19 @@
             width:100px;
             height: 150px;
         }
-        .book-description{
-            margin-top:8px;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            -webkit-line-clamp: 3;
-            display: -webkit-box;
-            -webkit-box-orient: vertical;
-            white-space: normal;
+        .book-content{
+            margin:12px 0px;
+            .book-description{
+                height: 144px;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                -webkit-line-clamp: 7;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                white-space: normal;
+            }
         }
+        
         .book-btn{
             margin-bottom: 6px;
             margin-right: 6px;

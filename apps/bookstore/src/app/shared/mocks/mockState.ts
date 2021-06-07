@@ -4,7 +4,7 @@ export const mockBooksState = {
   searchString: 'Angular',
   searchResults: mockBooks.items,
   recentSearches: ['Angular'],
-  error: false,
+  error: '',
   userandbill: {
     name: '',
     address: '',

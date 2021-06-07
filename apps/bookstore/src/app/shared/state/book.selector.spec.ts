@@ -13,7 +13,7 @@ describe('Book Selectors', () => {
 
   it('should select the error ', () => {
     const result = BooksSelectors.getError.projector(initialState);
-    expect(result).toBe(false);
+    expect(result).toBe('');
   });
   it('should select the search books ', () => {
     const result = BooksSelectors.getSearchResults.projector(initialState);

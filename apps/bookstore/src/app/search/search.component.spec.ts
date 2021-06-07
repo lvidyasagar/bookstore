@@ -91,7 +91,7 @@ describe('SearchComponent', () => {
     expect(component.books).toBeUndefined();
     expect(component.searchForm.controls.searchString.value).toBe('');
     facade.error$.subscribe((err) => {
-      expect(err).toBe(false);
+      expect(err).toBe('');
     });
   });
 
@@ -103,13 +103,13 @@ describe('SearchComponent', () => {
     expect(component.books.length).toBe(1);
     expect(component.searchForm.controls.searchString.value).toBe('Angular');
     facade.error$.subscribe((err) => {
-      expect(err).toBe(false);
+      expect(err).toBe('');
     });
   });
 
   it('should show error pop when google api is down', () => {
     spyOn(dialog, 'open');
-    mockerrorSelector.setResult(true);
+    mockerrorSelector.setResult('No books found with Search Criteria or Server Error');
     mockStore.refreshState();
     component.ngOnInit();
     expect(dialog.open).toHaveBeenCalled();
@@ -127,18 +127,6 @@ describe('SearchComponent', () => {
     expect(facade.setSearchString).toHaveBeenCalledWith('Angular');
     expect(facade.dispatchSearchResults).toHaveBeenCalled();
     expect(facade.addRecentSearches).toHaveBeenCalledWith('Angular');
-  });
-
-  it('should show error dialog if search returns empty results', () => {
-    mockBooksSelector.setResult([]);
-    mockSearchStringSelector.setResult('afgsajfhsakjfasg');
-    mockStore.refreshState();
-    spyOn(component, 'openDialog');
-    component.ngOnInit();
-    fixture.detectChanges();
-    expect(component.openDialog).toHaveBeenCalledWith(
-      'No books found with Search Criteria'
-    );
   });
 
   it('should redirect to book detail page when click on book', () => {
