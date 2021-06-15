@@ -17,9 +17,13 @@
     },
     "bookstore-e2e": {
       "tags": [],
-      "implicitDependencies": [
-        "bookstore"
-      ]
+      "implicitDependencies": ["bookstore"]
+    },
+    "api": {
+      "tags": []
+    },
+    "apis": {
+      "tags": []
     }
   }
 }

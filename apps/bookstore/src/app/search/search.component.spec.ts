@@ -88,7 +88,7 @@ describe('SearchComponent', () => {
 
   it('On load of component should get initial state from store', () => {
     fixture.detectChanges();
-    expect(component.books).toBeUndefined();
+    expect(component.books.length).toBe(0);
     expect(component.searchForm.controls.searchString.value).toBe('');
     facade.error$.subscribe((err) => {
       expect(err).toBe('');

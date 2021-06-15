@@ -5,6 +5,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { distinctUntilChanged } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -39,13 +40,15 @@ export class SearchComponent implements OnInit, OnDestroy {
       }
     });
     const subscription2 = this.facade.error$.subscribe((error) => {
-      if (error) {
-        this.openDialog(error);
-      }
-    });
+        if (error) {
+          this.openDialog(error);
+        }
+      });
     const subscription3 = this.facade.searchResults$.subscribe((books) => {
       if (books && books.length > 0) {
         this.books = books;
+      } else {
+        this.books = [];
       }
     });
 

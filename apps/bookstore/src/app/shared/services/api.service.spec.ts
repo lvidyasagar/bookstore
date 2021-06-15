@@ -29,17 +29,17 @@ describe('ApiService', () => {
 
   it('should call google book api and return books', fakeAsync(() => {
     service.getBooksBySearch('Angular').subscribe((data) => {
-      expect(data.items.length).toBe(1);
-      expect(data.items[0].volumeInfo.title).toBe('Pro Angular 6');
+      expect(data.length).toBe(1);
+      expect(data[0].volumeInfo.title).toBe('Pro Angular 6');
     });
 
     const req = httpTestingController.expectOne(
-      'https://www.googleapis.com/books/v1/volumes?q=Angular'
+      'http://localhost:3333/books/search/Angular'
     );
 
     expect(req.request.method).toEqual('GET');
 
-    req.flush(mockBooks);
+    req.flush(mockBooks.items);
 
     tick();
   }));

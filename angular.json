@@ -27,7 +27,6 @@
             "main": "apps/bookstore/src/main.ts",
             "polyfills": "apps/bookstore/src/polyfills.ts",
             "tsConfig": "apps/bookstore/tsconfig.app.json",
-            "aot": true,
             "assets": [
               "apps/bookstore/src/favicon.ico",
               "apps/bookstore/src/assets"
@@ -65,18 +64,31 @@
                   "maximumError": "4kb"
                 }
               ]
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
             }
-          }
+          },
+          "defaultConfiguration": "production"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "bookstore:build"
-          },
           "configurations": {
             "production": {
               "browserTarget": "bookstore:build:production"
+            },
+            "development": {
+              "browserTarget": "bookstore:build:development"
             }
+          },
+          "defaultConfiguration": "development",
+          "options": {
+            "proxyConfig": "apps/bookstore/proxy.conf.json"
           }
         },
         "extract-i18n": {
@@ -88,7 +100,7 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "codeCoverage":true,
+            "codeCoverage": true,
             "main": "apps/bookstore/src/test.ts",
             "polyfills": "apps/bookstore/src/polyfills.ts",
             "tsConfig": "apps/bookstore/tsconfig.spec.json",
@@ -111,9 +123,7 @@
               "apps/bookstore/tsconfig.app.json",
               "apps/bookstore/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "e2e": {
@@ -150,9 +160,107 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "apps/bookstore-e2e/tsconfig.json",
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
+          }
+        }
+      }
+    },
+    "api": {
+      "root": "apps/api",
+      "sourceRoot": "apps/api/src",
+      "projectType": "application",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/api",
+            "main": "apps/api/src/main.ts",
+            "tsConfig": "apps/api/tsconfig.app.json",
+            "assets": ["apps/api/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/api/src/environments/environment.ts",
+                  "with": "apps/api/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "api:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/api/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/api"],
+          "options": {
+            "jestConfig": "apps/api/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "apis": {
+      "root": "apps/apis",
+      "sourceRoot": "apps/apis/src",
+      "projectType": "application",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/apis",
+            "main": "apps/apis/src/main.ts",
+            "tsConfig": "apps/apis/tsconfig.app.json",
+            "assets": ["apps/apis/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/apis/src/environments/environment.ts",
+                  "with": "apps/apis/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "apis:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/apis/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/apis"],
+          "options": {
+            "jestConfig": "apps/apis/jest.config.js",
+            "passWithNoTests": true
           }
         }
       }

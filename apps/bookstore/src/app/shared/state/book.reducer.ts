@@ -20,6 +20,7 @@ export const sharedReducer = createReducer(
         ...state,
         searchResults:
           action.books && action.books.length > 0 ? action.books : [],
+        error:''
       };
     }
   ),
@@ -79,13 +80,13 @@ export const sharedReducer = createReducer(
     (state): BooksState => {
       return {
         ...state,
-        bookcollection: state.cartBooks.map((book) => {
+        bookcollection: state.bookcollection.concat(state.cartBooks.map((book) => {
           return {
             id: book.id,
             volumeInfo: book.volumeInfo,
             userandbilldetails: state.userandbill,
           };
-        }),
+        })),
       };
     }
   ),

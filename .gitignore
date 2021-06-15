@@ -9,14 +9,15 @@
 
 # dependencies
 /node_modules
-
-
+/apps/bookstore/coverage
+/apps/apis/
 # profiling files
 chrome-profiler-events*.json
 speed-measure-plugin*.json
 
 # IDEs and editors
 /.idea
+/.vscode
 .project
 .classpath
 .c9/

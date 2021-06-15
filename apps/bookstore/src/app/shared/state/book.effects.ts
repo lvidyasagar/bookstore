@@ -22,12 +22,8 @@ export class BookEffects {
       withLatestFrom(this.store.select(BooksSelectors.getSearchString)),
       mergeMap(([action, searchString]) =>
         this.service.getBooksBySearch(searchString).pipe(
-          map((books) =>{
-            const ModifiedBooks=books.items.map((book) => {
-              return { id: book.id, volumeInfo: book.volumeInfo }
-            })
-            return BooksActions.loadSearchResultsSuccess({books: ModifiedBooks})
-          }
+          map((books) =>
+            BooksActions.loadSearchResultsSuccess({ books: books })
           ),
           catchError((error) =>
             of(BooksActions.loadSearchResultsFailure({ error }))

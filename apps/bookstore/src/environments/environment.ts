@@ -4,8 +4,7 @@
 
 export const environment = {
   production: false,
-  googleApiUrl: 'https://www.googleapis.com/books/v1/volumes?q=',
-  getBookByIdGoogleBooksApi: 'https://www.googleapis.com/books/v1/volumes/'
+  googleApiUrl: '/books/search',
 };
 
 /*
@@ -15,4 +14,4 @@ export const environment = {
  * This import should be commented out in production mode because it will have a negative impact
  * on performance if an error is thrown.
  */
-// import 'zone.js/dist/zone-error';  // Included with Angular CLI.
+// import 'zone.js/plugins/zone-error';  // Included with Angular CLI.

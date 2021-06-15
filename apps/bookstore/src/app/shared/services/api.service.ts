@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Books } from '../models/Books';
+import { Items } from '../models/Books';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +10,8 @@ import { Books } from '../models/Books';
 export class ApiService {
   constructor(private http: HttpClient) {}
 
-  getBooksBySearch(searchString: string): Observable<Books> {
-    return this.http.get<Books>(environment.googleApiUrl + searchString);
+  getBooksBySearch(searchString: string): Observable<Items[]> {
+    const url = `${environment.googleApiUrl}/${searchString}`;
+    return this.http.get<Items[]>(url);
   }
 }

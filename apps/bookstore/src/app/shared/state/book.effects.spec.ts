@@ -46,7 +46,7 @@ describe('Book Effect', () => {
   });
 
   it('should call api service and get desired results', () => {
-    spyOn(service, 'getBooksBySearch').and.returnValue(of(mockBooks));
+    spyOn(service, 'getBooksBySearch').and.returnValue(of(mockBooks.items));
     mockSearchStringSelector.setResult(mockBooksState.searchString);
     mockStore.refreshState();
     effect.loadSearchResults$.subscribe((action) => {
