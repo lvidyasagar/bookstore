@@ -34,7 +34,7 @@ describe('ApiService', () => {
     });
 
     const req = httpTestingController.expectOne(
-      'http://localhost:3333/books/search/Angular'
+      '/books/search/Angular'
     );
 
     expect(req.request.method).toEqual('GET');

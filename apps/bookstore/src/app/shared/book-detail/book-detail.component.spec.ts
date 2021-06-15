@@ -8,10 +8,9 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { BookDetailComponent } from './book-detail.component';
 import { BookFacade } from '../state/book.facade';
 import { mockBooksState } from '../mocks/mockState';
-import { MemoizedSelectorWithProps } from '@ngrx/store';
+import { MemoizedSelector } from '@ngrx/store';
 import { BooksState } from '../state/book.state';
 import * as BooksSelectors from '../state/book.selector';
-import { Items } from '../models/Books';
 import { ActivatedRoute } from '@angular/router';
 import { AuthorPipe } from '../pipes/author.pipe';
 import { DescriptionPipe } from '../pipes/description.pipe';
@@ -26,7 +25,7 @@ describe('BookDetailComponent', () => {
   let facade: BookFacade;
   let router: Router;
   let mockStore: MockStore;
-  // tslint:disable-next-line: prefer-const
+  let mockBookByIdSelector: MemoizedSelector<BooksState, any>;
   let location: Location;
 
   const initialState = mockBooksState;
