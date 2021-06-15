@@ -20,7 +20,7 @@ export const sharedReducer = createReducer(
         ...state,
         searchResults:
           action.books && action.books.length > 0 ? action.books : [],
-        error:''
+        error: ''
       };
     }
   ),

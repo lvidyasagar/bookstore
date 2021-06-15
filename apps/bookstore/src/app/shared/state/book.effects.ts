@@ -23,7 +23,7 @@ export class BookEffects {
       mergeMap(([action, searchString]) =>
         this.service.getBooksBySearch(searchString).pipe(
           map((books) =>
-            BooksActions.loadSearchResultsSuccess({ books: books })
+            BooksActions.loadSearchResultsSuccess({ books })
           ),
           catchError((error) =>
             of(BooksActions.loadSearchResultsFailure({ error }))

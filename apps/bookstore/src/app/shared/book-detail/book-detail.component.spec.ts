@@ -26,7 +26,6 @@ describe('BookDetailComponent', () => {
   let facade: BookFacade;
   let router: Router;
   let mockStore: MockStore;
-  let mockBookByIdSelector: MemoizedSelectorWithProps<BooksState, any, any>;
   // tslint:disable-next-line: prefer-const
   let location: Location;
 
