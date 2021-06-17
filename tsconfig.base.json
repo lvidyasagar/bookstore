@@ -15,11 +15,10 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "es2020",
-    "lib": [
-      "es2018",
-      "dom"
-    ],
-    "paths": {},
+    "lib": ["es2018", "dom"],
+    "paths": {
+      "@bookstore/data": ["libs/data/src/index.ts"]
+    },
     "rootDir": "."
   },
   "angularCompilerOptions": {

@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Items } from '../../shared/models/Books';
+import { Items } from '@bookstore/data';
 import { BookFacade } from '../state/book.facade';
 @Component({
   selector: 'app-book-detail',

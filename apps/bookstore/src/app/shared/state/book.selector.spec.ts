@@ -1,7 +1,5 @@
-import { mockBooks } from '../models/Book-mock';
-import { initialBooksState } from './book.state';
 import * as BooksSelectors from './book.selector';
-import { mockBooksState } from '../mocks/mockState';
+import { mockBooksState } from '@bookstore/data';
 
 describe('Book Selectors', () => {
   const initialState = mockBooksState;

@@ -8,7 +8,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { BillingInfoComponent } from './billing-info.component';
 import { initialBooksState } from '../state/book.state';
-import { mockBooks } from '../models/Book-mock';
+import { mockBooks } from '@bookstore/data';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BookCollectionComponent } from '../../book-collection/book-collection.component';
 import { Router } from '@angular/router';

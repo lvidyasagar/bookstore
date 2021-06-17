@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { Items } from '../models/Books';
+import { Items, Bill } from '@bookstore/data';
 import * as BooksSelectors from './book.selector';
 import * as BooksActions from './book.action';
 import { BooksState } from './book.state';
-import { Bill } from '../models/Bill';
 
 @Injectable()
 export class BookFacade {

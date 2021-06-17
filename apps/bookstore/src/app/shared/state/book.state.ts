@@ -1,5 +1,4 @@
-import { Bill } from '../models/Bill';
-import { Items } from '../models/Books';
+import { Items, Bill } from '@bookstore/data';
 
 export interface BooksState {
   searchString: string;

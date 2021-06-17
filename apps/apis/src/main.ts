@@ -1,12 +1,17 @@
 import * as express from 'express';
 import bookRoutes from './app/routes/book.route';
-import * as cors from 'cors'
+import * as cors from 'cors';
 
 const app = express();
 
 app.use(cors());
 
-app.use('/books',bookRoutes)
+app.get('/', (req, res) => {
+  res.send({ message: 'Welcome to apis' });
+});
+
+app.use('/books', bookRoutes);
+
 const port = process.env.port || 3333;
 
 const server = app.listen(port, () => {
@@ -14,3 +19,5 @@ const server = app.listen(port, () => {
 });
 
 server.on('error', console.error);
+
+export default app;

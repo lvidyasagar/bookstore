@@ -1,6 +1,6 @@
 import { environment } from '../../environments/environment';
 import axios, { AxiosResponse, AxiosError } from 'axios';
-import { Book } from '../models/Book';
+import { Items } from '@bookstore/data';
 import express = require('express');
 
 const search = async (req: express.Request, res: express.Response) => {
@@ -19,9 +19,9 @@ const search = async (req: express.Request, res: express.Response) => {
 };
 
 const filterResponse = (response: AxiosResponse) => {
-  let ModifiedResponse: Book[] = [];
-  if (response.data.items) {
-    ModifiedResponse = response.data.items.map((book: Book) => {
+  let ModifiedResponse: Items[] = [];
+  if (response.data && response.data.items) {
+    ModifiedResponse = response.data.items.map((book: Items) => {
       return {
         id: book.id,
         volumeInfo: {
@@ -46,4 +46,4 @@ const filterResponse = (response: AxiosResponse) => {
   }
 };
 
-export default { search };
+export default { search, filterResponse };

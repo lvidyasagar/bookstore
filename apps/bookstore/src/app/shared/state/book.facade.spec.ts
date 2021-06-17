@@ -3,7 +3,7 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { BookFacade } from './book.facade';
 import { initialBooksState } from './book.state';
 import * as BookActions from './book.action';
-import { mockBooks } from '../models/Book-mock';
+import { mockBooks } from '@bookstore/data';
 describe('Books Facade', () => {
   let mockStore: MockStore;
   let facade: BookFacade;

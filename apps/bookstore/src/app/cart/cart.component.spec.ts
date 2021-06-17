@@ -10,7 +10,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { BookFacade } from '../shared/state/book.facade';
 import { BooksState, initialBooksState } from '../shared/state/book.state';
 import * as BooksSelectors from '../shared/state/book.selector';
-import { mockBooks } from '../shared/models/Book-mock';
+import { mockBooks } from '@bookstore/data';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 describe('CartComponent', () => {
   let component: CartComponent;

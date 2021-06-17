@@ -1,6 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { Bill } from '../models/Bill';
-import { Items } from '../models/Books';
+import { Items, Bill } from '@bookstore/data';
 
 export const setSearchString = createAction(
   '[Search] Set Search String',

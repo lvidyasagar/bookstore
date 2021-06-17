@@ -16,8 +16,7 @@ import { MemoizedSelector } from '@ngrx/store';
 import * as BooksSelectors from '../shared/state/book.selector';
 import { BookCollectionComponent } from './book-collection.component';
 import { BooksState, initialBooksState } from '../shared/state/book.state';
-import { mockBooksState } from '../shared/mocks/mockState';
-import { mockBooks } from '../shared/models/Book-mock';
+import { mockBooksState, mockBooks } from '@bookstore/data';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('BookCollectionComponent', () => {

@@ -7,7 +7,7 @@ import { BillingInfoComponent } from '../billing-info/billing-info.component';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { BookDetailComponent } from './book-detail.component';
 import { BookFacade } from '../state/book.facade';
-import { mockBooksState } from '../mocks/mockState';
+import { mockBooksState } from '@bookstore/data';
 import { MemoizedSelector } from '@ngrx/store';
 import { BooksState } from '../state/book.state';
 import * as BooksSelectors from '../state/book.selector';

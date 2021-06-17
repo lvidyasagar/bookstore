@@ -1,5 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { Items } from '../models/Books';
+import { Items } from '@bookstore/data';
 import { BooksState } from './book.state';
 
 export const SharedSelector = createFeatureSelector<BooksState>('app');

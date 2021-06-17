@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { ErrorDialogComponent } from '../shared/error-dialog/error-dialog.component';
-import { Items } from '../shared/models/Books';
+import { Items } from '@bookstore/data';
 import { BookFacade } from '../shared/state/book.facade';
 
 @Component({

@@ -19,10 +19,10 @@
       "tags": [],
       "implicitDependencies": ["bookstore"]
     },
-    "api": {
+    "apis": {
       "tags": []
     },
-    "apis": {
+    "data": {
       "tags": []
     }
   }

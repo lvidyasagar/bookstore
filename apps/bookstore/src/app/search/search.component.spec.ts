@@ -9,7 +9,7 @@ import { BookFacade } from '../shared/state/book.facade';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { MemoizedSelector } from '@ngrx/store';
 import { BooksState, initialBooksState } from '../shared/state/book.state';
-import { mockBooksState } from '../shared/mocks/mockState';
+import { mockBooksState } from '@bookstore/data';
 import * as BooksSelectors from '../shared/state/book.selector';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
